@@ -1,0 +1,12 @@
+# Arquivos de entrada
+entrada/
+
+# Arquivos gerados
+saida/
+
+# Ambiente virtual
+.venv/
+
+# Cache do Python
+__pycache__/
+*.pyc
