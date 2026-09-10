@@ -8,49 +8,51 @@ with open(arquivo, "r", encoding="utf-8-sig") as arquivo_csv:
 
     linhas = list(leitor)
 
-linha_servidor = linhas[8]
-linha_setor = linhas[9]
-linha_status = linhas[10]
+servidores = []
 
-print('SERVIDOR: ')
-print(linha_servidor)
 
-print('\nSETOR: ')
-print(linha_setor)
+for indice, linha in enumerate(linhas):
+    if indice + 2 < len(linhas):
+        linha_setor = linhas[indice + 1]
+        linha_admissao = linhas[indice + 2]
+        separa_data = linha_admissao[11].split("/")
+        verifica_data = separa_data[0].isnumeric() and separa_data[1].isnumeric() and separa_data[2].isnumeric()
+        if linha[1].isnumeric() and linha_setor[1] == '' and linha_setor[10] != '' and verifica_data:
+            matricula = linha[1]
+            nome = linha[3]
+            data_nascimento = linha[5]
+            cargo = linha[7]
+            setor = linha_setor[10]
+            data_admissao = linha_admissao[11]
+            servidor = {
+                "matricula": matricula,
+                "nome": nome,
+                "data_nascimento": data_nascimento,
+                "cargo": cargo,
+                "setor": setor,
+                "data_admissao": data_admissao
+            }
+            servidores.append(servidor)
 
-print('\nSTATUS: ')
-print(linha_status)
+print(f'Total de servidores: {len(servidores)}')
+print(servidores[0])
+print(servidores[1])
+print(servidores[2])
 
-matricula = linha_servidor[1]
-nome = linha_servidor[3]
-nascimento = linha_servidor[5]
-cargo = linha_servidor[7]
+contador = 0
+matriculas = set()
+duplicadas = 0
+for servidor in servidores:
+    if servidor["matricula"] not in matriculas:
+        matriculas.add(servidor["matricula"])
+    else:
+        duplicadas += 1
+    if servidor["nome"].strip() == "":
+        contador += 1
 
-setor = linha_setor[10]
+print(contador)
+print(duplicadas)
 
-data_admissao = linha_status[11]
 
-print(f'Matrícula: {matricula}')
-print(f'Nome: {nome}')
-print(f'Nascimento: {nascimento}')
-print(f'Cargo: {cargo}')
-print(f'Setor: {setor}')
-print(f'Data de Admissão: {data_admissao}')
 
-for indice, valor in enumerate(linha_servidor):
-    if indice == 1 or indice == 3 or indice == 5 or indice == 7:
-        print(f'{indice}° Índice {valor}')
-
-    if valor.isnumeric() and indice == 1:
-        print(f'Achamos a matrícula: {valor}')
-
-for linha in linhas:
-    if linha[1].isnumeric():
-        matricula = linha[1]
-        nome = linha[3]
-        nascimento = linha[5]
-        cargo = linha[7]
-        print(f'Matrícula do servidor: {matricula}')
-        print(f'Nome: {nome}')
-        print(f'Nascimento: {nascimento}')
-        print(f'Cargo: {cargo}')
+    
